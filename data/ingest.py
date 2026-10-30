@@ -252,7 +252,7 @@ def main() -> None:
 
     print(f"\nDone. {len(chunks)} chunks stored at {VECTOR_DIR}")
     print("Run 'python data/ingest.py' again after adding or editing documents.")
-    print("\nSetup complete. Run 'python s01/solution/main.py' to start WealthDesk.")
+    print("\nSetup complete. Run 'python -m wealthdesk.agent' from inside s04/starter/ or s04/solution/ to start WealthDesk.")
 
 
 if __name__ == "__main__":
