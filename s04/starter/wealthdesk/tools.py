@@ -25,4 +25,5 @@ classifier_llm = ChatGroq(
     model=MODEL_NAME,
     temperature=0.0,
     max_tokens=200,
+    reasoning_effort="low",
 )
