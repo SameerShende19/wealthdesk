@@ -38,7 +38,7 @@ def _init_vectorstore() -> None:
         vectorstore = Chroma(
             persist_directory=str(VECTORSTORE_DIR),
             embedding_function=embeddings,
-            client_settings=ChromaSettings(anonymized_telemetry=False),
+            client_settings=ChromaSettings(anonymized_telemetry=False),  # suppress "Failed to send telemetry" noise in terminal
         )
         count = vectorstore._collection.count()
         if count == 0:
