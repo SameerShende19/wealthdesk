@@ -152,6 +152,7 @@ def retrieve_docs(state: WealthDeskState) -> dict:
 # Two changes from Session 3:
 #
 #   1. Early-exit if no docs were retrieved:
+#        history   = state.get("history", [])
 #        retrieved = state.get("retrieved_docs", [])
 #        if not retrieved:
 #            new_history = history + [
