@@ -12,6 +12,8 @@ with one change: classify() now returns IN_SCOPE / OUT_OF_SCOPE (2-way) instead
 of SIMPLE / COMPLEX / OUT_OF_SCOPE (3-way). The respond() node handles escalation
 internally when no docs are retrieved.
 """
+import chromadb
+from chromadb.config import Settings as ChromaSettings
 from langchain_chroma import Chroma
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -36,6 +38,7 @@ def _init_vectorstore() -> None:
         vectorstore = Chroma(
             persist_directory=str(VECTORSTORE_DIR),
             embedding_function=embeddings,
+            client_settings=ChromaSettings(anonymized_telemetry=False),
         )
         count = vectorstore._collection.count()
         if count == 0:
