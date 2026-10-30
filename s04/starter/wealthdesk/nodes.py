@@ -12,23 +12,8 @@ with one change: classify() now returns IN_SCOPE / OUT_OF_SCOPE (2-way) instead
 of SIMPLE / COMPLEX / OUT_OF_SCOPE (3-way). The respond() node handles escalation
 internally when no docs are retrieved.
 """
-import chromadb
-from chromadb.config import Settings as ChromaSettings
 from langchain_chroma import Chroma
 
-# Some ChromaDB versions have a bug where capture() is called with the wrong
-# number of arguments even when anonymized_telemetry=False. Patch both the
-# abstract base and the concrete Posthog subclass to no-ops.
-try:
-    from chromadb.telemetry.product import ProductTelemetryClient
-    ProductTelemetryClient.capture = lambda *args, **kwargs: None
-except Exception:
-    pass
-try:
-    from chromadb.telemetry.product.posthog import Posthog
-    Posthog.capture = lambda *args, **kwargs: None
-except Exception:
-    pass
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_huggingface import HuggingFaceEmbeddings
 
@@ -52,7 +37,6 @@ def _init_vectorstore() -> None:
         vectorstore = Chroma(
             persist_directory=str(VECTORSTORE_DIR),
             embedding_function=embeddings,
-            client_settings=ChromaSettings(anonymized_telemetry=False),  # suppress "Failed to send telemetry" noise in terminal
         )
         count = vectorstore._collection.count()
         if count == 0:
