@@ -15,6 +15,14 @@ internally when no docs are retrieved.
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 from langchain_chroma import Chroma
+
+# Some ChromaDB versions have a bug where capture() is called with the wrong
+# number of arguments even when anonymized_telemetry=False. Patch it to a no-op.
+try:
+    from chromadb.telemetry.product import ProductTelemetryClient
+    ProductTelemetryClient.capture = lambda *args, **kwargs: None
+except Exception:
+    pass
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_huggingface import HuggingFaceEmbeddings
 
