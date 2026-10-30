@@ -17,10 +17,16 @@ from chromadb.config import Settings as ChromaSettings
 from langchain_chroma import Chroma
 
 # Some ChromaDB versions have a bug where capture() is called with the wrong
-# number of arguments even when anonymized_telemetry=False. Patch it to a no-op.
+# number of arguments even when anonymized_telemetry=False. Patch both the
+# abstract base and the concrete Posthog subclass to no-ops.
 try:
     from chromadb.telemetry.product import ProductTelemetryClient
     ProductTelemetryClient.capture = lambda *args, **kwargs: None
+except Exception:
+    pass
+try:
+    from chromadb.telemetry.product.posthog import Posthog
+    Posthog.capture = lambda *args, **kwargs: None
 except Exception:
     pass
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
